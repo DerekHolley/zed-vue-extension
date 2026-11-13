@@ -6,6 +6,8 @@ use zed_extension_api::serde_json::json;
 use zed_extension_api::settings::LspSettings;
 use zed_extension_api::{self as zed, serde_json, Result};
 
+const EXTENSION_NAME: &str = "vue-language-server";
+
 const SERVER_PATH: &str = "node_modules/@vue/language-server/bin/vue-language-server.js";
 const PACKAGE_NAME: &str = "@vue/language-server";
 
@@ -156,7 +158,7 @@ impl zed::Extension for VueExtension {
         _language_server_id: &zed::LanguageServerId,
         worktree: &zed::Worktree,
     ) -> Result<Option<serde_json::Value>> {
-        let initialization_options = LspSettings::for_worktree("vue", worktree)
+        let initialization_options = LspSettings::for_worktree(EXTENSION_NAME, worktree)
             .ok()
             .and_then(|settings| settings.initialization_options)
             .unwrap_or_else(|| json!({}));
@@ -168,7 +170,7 @@ impl zed::Extension for VueExtension {
         _language_server_id: &zed::LanguageServerId,
         worktree: &zed::Worktree,
     ) -> Result<Option<serde_json::Value>> {
-        let settings = LspSettings::for_worktree("vue", worktree)
+        let settings = LspSettings::for_worktree(EXTENSION_NAME, worktree)
             .ok()
             .and_then(|settings| settings.settings)
             .unwrap_or_else(|| {
